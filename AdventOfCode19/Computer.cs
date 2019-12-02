@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdventOfCode19
 {
     class Computer
     {
-        private List<int> codes;
+        private readonly List<int> _memory;
         private Dictionary<int, Func<int, int, int>> actions;
 
-        public Computer(string codes, int input1, int input2)
+        public Computer(string memory, int noun, int verb)
         {
-            this.codes = codes.Split(',').Select(int.Parse).ToList();
-            this.codes[1] = input1;
-            this.codes[2] = input2;
+            _memory = memory.Split(',').Select(int.Parse).ToList();
+            _memory[1] = noun;
+            _memory[2] = verb;
             actions = new Dictionary<int, Func<int, int, int>>
             {
                 { 1, (x, y) => x + y },
@@ -25,27 +22,27 @@ namespace AdventOfCode19
 
         }
 
-        public void RunIteration(int opCode, int position1, int position2, int outputPosition)
+        public void RunInstruction(int opCode, int address1, int address2, int outputAddress)
         {
-            var input1 = codes[position1];
-            var input2 = codes[position2];
+            var input1 = _memory[address1];
+            var input2 = _memory[address2];
             var op = actions[opCode];
             var result = op(input1, input2);
-            codes[outputPosition] = result;
+            _memory[outputAddress] = result;
         }
 
         public int Run()
         {
-            var cursor = 0;
+            var pointer = 0;
             while (true)
             {
-                var opCode = codes[cursor];
+                var opCode = _memory[pointer];
                 if (opCode == 99)
                 {
-                    return codes[0];
+                    return _memory[0];
                 }
-                RunIteration(opCode, codes[cursor + 1], codes[cursor + 2], codes[cursor + 3]);
-                cursor += 4;
+                RunInstruction(opCode, _memory[pointer + 1], _memory[pointer + 2], _memory[pointer + 3]);
+                pointer += 4;
             }
         }
     }

@@ -8,6 +8,10 @@ namespace AdventOfCode
         {
             Console.WriteLine("What date is it today?");
             var input = Console.ReadLine();
+            if (input == null)
+            {
+                throw new Exception("day be null!");
+            }
             var today = DayFactory.GetDay(int.Parse(input));
             Console.WriteLine("Solving puzzle for today!");
             var resultOne = today.GetSolutionPartOne();
@@ -16,6 +20,8 @@ namespace AdventOfCode
             Console.WriteLine("getting solution to part 2...");
             var resultTwo = today.GetSolutionPartTwo();
             Console.WriteLine("solution for part two is: " + resultTwo);
+
+
             Console.WriteLine("Any key to continue...");
             Console.ReadLine();
         }
